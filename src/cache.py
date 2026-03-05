@@ -42,7 +42,25 @@ class Cache:
         return self.__miss
     
     def __LRU(self):
-        pass
+        with open(self.__filename, 'r') as f:
+            first_line = f.readline().strip()
+            self.capacity = int(first_line.split()[0])
+            self.r_size = int(first_line.split()[1])
+            for line in f:
+                line = line.strip()
+                if line:
+                    vals = line.split()
+                    for val in vals:
+                        if val in self.__memory:
+                            self.__memory.remove(val)
+                            self.__memory.append(val)
+                            continue
+
+                        self.__miss += 1
+                        if len(self.__memory) >= self.capacity:
+                            self.__memory.pop(0)
+                        self.__memory.append(val)
+        return self.__miss
     
     def __OPTFF(self):
         pass
